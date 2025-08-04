@@ -21,10 +21,12 @@ Players can modify their own scoreboard display.
 - ✅ **Discord Bot連携** - 統計データをDiscordに自動投稿
 
 ## 更新履歴 (Update History)
-### 2025/07/30
+### 2025/08/02
 - **バグ修正**: サーバー停止時にプロセスが正常に終了しない問題を修正
   - Discord Bot のスケジューラーが適切にシャットダウンされていなかった問題を解決
   - Windows環境でサーバー停止後に「キーを押してください」のプロンプトが表示されない問題を修正
+  - メモリにデータを保存していたのをファイルに変更し、データの永続化
+  - debug-modeの追加
 
 ## インストール (Installation)
 **重要**: このmodは**サーバー側にのみ**インストールしてください。
@@ -34,7 +36,7 @@ Players can modify their own scoreboard display.
 Installing on the client side will have no effect.
 
 ### サーバー側 (Server Side)
-1. `mysb-1.0.0.jar` をサーバーの `mods` フォルダに配置
+1. `mysb-1.x.jar` をサーバーの `mods` フォルダに配置
 2. サーバーを起動
 
 ### クライアント側 (Client Side)
@@ -151,3 +153,4 @@ MIT License
 
 ---
 **Server-Side Only Mod - No Client Installation Required**
+
