@@ -83,25 +83,31 @@ public class ServerScoreboardCommands {
                                 .then(CommandManager.literal("list")
                                         .executes(ServerScoreboardCommands::listStatStatus))))
                 .then(CommandManager.literal("discord")
-                        .requires(source -> source.hasPermissionLevel(2)) // OP権限レベル2
+                        .requires(source -> source.hasPermissionLevel(0)) // 権限レベル0（全員使用可能）
                         .then(CommandManager.literal("setchannel")
+                                .requires(source -> source.hasPermissionLevel(4)) // 権限レベル4
                                 .then(CommandManager.argument("channelId", StringArgumentType.string())
                                         .executes(ServerScoreboardCommands::setForumChannel)))
                         .then(CommandManager.literal("add")
+                                .requires(source -> source.hasPermissionLevel(0)) // 権限レベル0
                                 .then(CommandManager.argument("objective", StringArgumentType.word())
                                         .suggests(ServerScoreboardCommands::suggestObjectives)
                                         .executes(ServerScoreboardCommands::addDiscordObjective)))
                         .then(CommandManager.literal("remove")
+                                .requires(source -> source.hasPermissionLevel(0)) // 権限レベル0
                                 .then(CommandManager.argument("objective", StringArgumentType.word())
                                         .suggests(ServerScoreboardCommands::suggestDiscordObjectives)
                                         .executes(ServerScoreboardCommands::removeDiscordObjective)))
                         .then(CommandManager.literal("list")
+                                .requires(source -> source.hasPermissionLevel(0)) // 権限レベル0
                                 .executes(ServerScoreboardCommands::listDiscordObjectives))
                         .then(CommandManager.literal("update")
+                                .requires(source -> source.hasPermissionLevel(0)) // 権限レベル0
                                 .then(CommandManager.argument("objective", StringArgumentType.word())
                                         .suggests(ServerScoreboardCommands::suggestDiscordObjectives)
                                         .executes(ServerScoreboardCommands::updateDiscordObjective)))
                         .then(CommandManager.literal("status")
+                                .requires(source -> source.hasPermissionLevel(4)) // 権限レベル4
                                 .executes(ServerScoreboardCommands::showDiscordStatus))
                         .then(CommandManager.literal("reload")
                                 .requires(source -> source.hasPermissionLevel(4)) // OP権限レベル4
@@ -624,19 +630,9 @@ public class ServerScoreboardCommands {
             
             SimpleDiscordBot.getInstance().reload(source.getServer());
             
-            // 少し待ってから結果を表示
-            source.getServer().execute(() -> {
-                try {
-                    Thread.sleep(2000); // 2秒待機
-                    if (SimpleDiscordBot.getInstance().isRunning()) {
-                        source.sendFeedback(Text.literal("Discord Botが正常に再起動されました").formatted(Formatting.GREEN), true);
-                    } else {
-                        source.sendError(Text.literal("Discord Botの再起動に失敗しました。設定ファイルを確認してください。"));
-                    }
-                } catch (InterruptedException e) {
-                    // 無視
-                }
-            });
+            // 再起動完了メッセージを表示
+            source.sendFeedback(Text.literal("Discord Botの再起動が完了しました").formatted(Formatting.GREEN), true);
+            ServerScoreboardLogger.info("Discord Bot reloaded successfully");
             
             return 1;
         } catch (Exception e) {
